@@ -3,25 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web desde Go</title>
+    <title>API Cloner</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header
-      class="flex justify-around items-center bg-gray-800 text-white h-14"
-    >
-      <h1 class="text-center font-bold">API Cloner</h1>
-      <nav>nav</nav>
+  <body class="bg-gray-100">
+    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
+      <h1 class="text-xl font-bold">API Cloner</h1>
+      <nav class="flex gap-4">
+        <a href="#" class="hover:text-gray-400">Inicio</a>
+        <a href="#" class="hover:text-gray-400">Documentación</a>
+        <a href="#" class="hover:text-gray-400">Contacto</a>
+      </nav>
     </header>
-    <section
-      class="flex flex-col justify-center items-center h-screen px-4 py-4 gap-4"
-    >
-      <h2 class="text-xl font-bold text-center">Clonador de Apis</h2>
-      <form class="flex items-center gap-2">
-
-        <input type="text" placeholder="ingresa la url api" class="border border-red-600 p-2 rounded-md" />
-        <button class="bg-red-500 hover:bg-red-600 rounded-md px-2 py-2 font-bold text-white">clonar</button>
-      </fo>
+    <section class="flex flex-col justify-center items-center min-h-screen px-4 py-8 bg-gray-200">
+      <h2 class="text-2xl font-bold text-center mb-6">Clonador de APIs Públicas</h2>
+      <form class="flex flex-col md:flex-row items-center gap-4 w-full max-w-md">
+        <input 
+          type="text" 
+          placeholder="Ingresa la URL de la API" 
+          class="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-red-500" 
+          aria-label="URL de la API"
+        />
+        <button 
+          type="submit" 
+          class="bg-red-500 hover:bg-red-600 rounded-md px-4 py-3 font-bold text-white"
+        >
+          Clonar
+        </button>
+      </form>
     </section>
   </body>
 </html>
