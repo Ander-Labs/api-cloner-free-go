@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Cloner - Respuesta API</title>
+    <link
+      rel="shortcut icon"
+      href="/public/favicon/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluir la librería de Ace Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <header class="bg-gray-800 text-white p-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">
+          <a href="/">API Cloner - Respuesta</a>
+        </h1>
+      </div>
+    </header>
+
+    <main class="py-8 px-4">
+      <div class="max-w-4xl mx-auto bg-white shadow-md rounded-md p-6">
+        <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">
+          Detalles de la Respuesta
+        </h2>
+        <p class="text-lg font-semibold text-gray-800">
+          Código de estado: {{.StatusCode}}
+        </p>
+
+        <h3 class="text-xl font-semibold text-gray-700 mt-6">Encabezados:</h3>
+        <ul class="space-y-2 mt-2">
+          {{range $key, $value := .Headers}}
+          <li class="flex justify-between p-2 bg-gray-50 rounded-md shadow-sm">
+            <span class="text-sm font-medium text-gray-700">{{ $key }}</span>
+            <span class="text-sm text-gray-500">{{ $value }}</span>
+          </li>
+          {{end}}
+        </ul>
+
+        <h3 class="text-xl font-semibold text-gray-700 mt-6">Cuerpo:</h3>
+        <!-- Contenedor para el editor JSON -->
+        <div
+          id="json-editor"
+          class="mt-2 bg-gray-100 p-4 rounded-md overflow-x-auto"
+          style="height: 400px"
+        ></div>
+
+        <!-- Botones para exportar -->
+        <div class="mt-6 flex justify-between">
+          <button
+            id="export-json"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md"
+          >
+            Exportar JSON
+          </button>
+          <button
+            id="export-csv"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md"
+          >
+            Exportar CSV
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Inicializar el editor Ace para JSON
+      var editor = ace.edit("json-editor");
+      editor.setTheme("ace/theme/github");
+      editor.session.setMode("ace/mode/json");
+      editor.session.setUseWrapMode(true);
+
+      // Verifica si el contenido está en formato de texto o de objeto
+      var bodyContent = `{{.Body}}`;
+      if (typeof bodyContent === "string") {
+        try {
+          bodyContent = JSON.parse(bodyContent); // Convierte a objeto si es un string
+        } catch (e) {
+          console.error("Error al analizar el JSON:", e);
+        }
+      }
+
+      // Inserta el JSON correctamente formateado en el editor
+      editor.setValue(JSON.stringify(bodyContent, null, 2), -1); // Formatea con 2 espacios
+
+      // Funcionalidad para exportar JSON
+      document
+        .getElementById("export-json")
+        .addEventListener("click", function () {
+          var jsonContent = editor.getValue();
+          var blob = new Blob([jsonContent], { type: "application/json" });
+          var link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "response.json";
+          link.click();
+        });
+
+      // Funcionalidad para exportar CSV (si el JSON es un array de objetos)
+      document
+        .getElementById("export-csv")
+        .addEventListener("click", function () {
+          var jsonContent = editor.getValue();
+          try {
+            var data = JSON.parse(jsonContent);
+            if (Array.isArray(data) && data.length > 0) {
+              var headers = Object.keys(data[0]);
+              var csv = headers.join(",") + "\n";
+              data.forEach(function (item) {
+                csv +=
+                  headers
+                    .map(function (header) {
+                      return item[header];
+                    })
+                    .join(",") + "\n";
+              });
+              var blob = new Blob([csv], { type: "text/csv" });
+              var link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = "response.csv";
+              link.click();
+            } else {
+              alert("El JSON no es un array de objetos.");
+            }
+          } catch (e) {
+            alert("Error al convertir a CSV.");
+          }
+        });
+    </script>
+  </body>
+</html>

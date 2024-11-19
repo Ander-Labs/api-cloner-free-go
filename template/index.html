@@ -4,46 +4,106 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API Cloner</title>
+    <link
+      rel="shortcut icon"
+      href="/public/favicon/favicon.ico"
+      type="image/x-icon"
+    />
+
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-100">
-    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
-      <h1 class="text-xl font-bold">API Cloner</h1>
-      <nav class="flex gap-4">
-        <a href="#" class="hover:text-gray-400">Inicio</a>
-        <a href="#" class="hover:text-gray-400">Documentación</a>
-        <a href="#" class="hover:text-gray-400">Contacto</a>
-      </nav>
+  <body class="bg-gray-50 font-sans">
+    <header class="bg-gray-800 text-white p-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">API Cloner</h1>
+        <nav class="space-x-4">
+          <a href="#" class="hover:text-gray-300">Inicio</a>
+          <a href="#" class="hover:text-gray-300">Documentación</a>
+          <a href="#" class="hover:text-gray-300">Contacto</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="flex flex-col items-center min-h-screen px-4 py-8 bg-gray-200">
-      <h2 class="text-2xl font-bold text-center mb-6">Clonador de APIs Públicas</h2>
-      <form 
-        class="flex flex-col md:flex-row items-center gap-4 w-full max-w-md" 
-        action="/clone" 
-        method="POST">
-        <label for="api-url" class="sr-only">URL de la API</label>
-        <input 
-          id="api-url"
-          name="api_url"
-          type="text" 
-          placeholder="Ingresa la URL de la API" 
-          class="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-red-500" 
-          aria-label="URL de la API"
-        />
-        <button 
-          type="submit" 
-          class="bg-red-500 hover:bg-red-600 rounded-md px-4 py-3 font-bold text-white">
-          Clonar
-        </button>
-      </form>
+    <main class="py-8 px-4">
+      <div class="max-w-4xl mx-auto bg-white shadow-md rounded-md p-6">
+        <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">
+          Clonador de APIs Públicas
+        </h2>
+        <form action="/send" method="POST" class="space-y-6">
+          <div>
+            <label for="url" class="block text-sm font-medium text-gray-700"
+              >URL de la API</label
+            >
+            <input
+              id="url"
+              name="url"
+              type="text"
+              placeholder="Ingresa la URL de la API"
+              required
+              class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
 
-      <section id="resultados" class="mt-8 w-full max-w-3xl bg-white shadow-md rounded-md p-4">
-        <h3 class="text-lg font-bold mb-2">Resultados:</h3>
-        <div id="logs" class="text-sm text-gray-700">
-          <!-- Los mensajes o logs del backend aparecerán aquí -->
-        </div>
-      </section>
+          <div>
+            <label for="method" class="block text-sm font-medium text-gray-700"
+              >Método</label
+            >
+            <select
+              id="method"
+              name="method"
+              required
+              class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="body" class="block text-sm font-medium text-gray-700"
+              >Cuerpo de la solicitud (opcional)</label
+            >
+            <textarea
+              id="body"
+              name="body"
+              placeholder="Ingresa el cuerpo de la solicitud (opcional)"
+              rows="6"
+              class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+
+          <div class="flex justify-center">
+            <button
+              type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              Enviar solicitud
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="max-w-4xl mx-auto mt-12">
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">
+          Historial de solicitudes
+        </h3>
+        <ul class="space-y-2">
+          {{range .}}
+          <li
+            class="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-sm"
+          >
+            <div class="text-lg font-semibold text-gray-700">
+              {{.URL}} - {{.Method}}
+            </div>
+            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800"
+              >Ver detalles</a
+            >
+          </li>
+          {{end}}
+        </ul>
+      </div>
     </main>
   </body>
 </html>
