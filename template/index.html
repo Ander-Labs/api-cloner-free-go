@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,10 +15,17 @@
         <a href="#" class="hover:text-gray-400">Contacto</a>
       </nav>
     </header>
-    <section class="flex flex-col justify-center items-center min-h-screen px-4 py-8 bg-gray-200">
+
+    <main class="flex flex-col items-center min-h-screen px-4 py-8 bg-gray-200">
       <h2 class="text-2xl font-bold text-center mb-6">Clonador de APIs Públicas</h2>
-      <form class="flex flex-col md:flex-row items-center gap-4 w-full max-w-md">
+      <form 
+        class="flex flex-col md:flex-row items-center gap-4 w-full max-w-md" 
+        action="/clone" 
+        method="POST">
+        <label for="api-url" class="sr-only">URL de la API</label>
         <input 
+          id="api-url"
+          name="api_url"
           type="text" 
           placeholder="Ingresa la URL de la API" 
           class="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-red-500" 
@@ -26,11 +33,17 @@
         />
         <button 
           type="submit" 
-          class="bg-red-500 hover:bg-red-600 rounded-md px-4 py-3 font-bold text-white"
-        >
+          class="bg-red-500 hover:bg-red-600 rounded-md px-4 py-3 font-bold text-white">
           Clonar
         </button>
       </form>
-    </section>
+
+      <section id="resultados" class="mt-8 w-full max-w-3xl bg-white shadow-md rounded-md p-4">
+        <h3 class="text-lg font-bold mb-2">Resultados:</h3>
+        <div id="logs" class="text-sm text-gray-700">
+          <!-- Los mensajes o logs del backend aparecerán aquí -->
+        </div>
+      </section>
+    </main>
   </body>
 </html>
